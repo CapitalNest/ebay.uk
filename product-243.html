@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Ebay</title>
+  <style>
+    /* Reset & base */
+    :root{
+      --accent:#0066ff; --muted:#6b7280; --bg:#ffffff; --card:#ffffff; --shadow:0 6px 18px rgba(15,23,42,0.08);
+      --radius:12px; --gap:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#0f172a;background:var(--bg);}
+
+    /* Top safe area mimic */
+    .statusbar{height:22px;background:#0f172a;color:#fff;width:100%;display:flex;align-items:center;padding:4px 12px;font-size:12px}
+
+    .header{display:flex;align-items:center;padding:12px;gap:12px;border-bottom:1px solid #eef2f7;background:#fff}
+    .logo{font-weight:800;color:var(--accent);font-size:20px}
+    .icons{margin-left:auto;display:flex;gap:12px;align-items:center}
+    .search{display:flex;padding:10px;border-radius:8px;border:1px solid #e6e9ef;flex:1;margin-left:12px}
+    .search input{border:none;outline:none;font-size:14px;width:100%}
+    .search button{background:var(--accent);color:#fff;border:none;padding:6px 10px;border-radius:6px;margin-left:8px}
+
+    .page{max-width:740px;margin:0 auto;padding:12px;}
+
+    /* Gallery */
+    .carousel{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);position:relative;}
+    .main-image{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:#f6f7fb}
+    .main-image img{width:100%;height:100%;object-fit:contain}
+    .dots{display:flex;gap:6px;justify-content:center;padding:10px}
+    .dot{width:8px;height:8px;background:#dbe3f0;border-radius:999px}
+    .dot.active{background:var(--accent)}
+
+    /* Title & ratings */
+    .title{font-size:18px;font-weight:700;margin-top:14px}
+    .sub{color:var(--muted);font-size:13px;margin-top:6px;display:flex;align-items:center;gap:8px}
+    .seller-badge{display:flex;align-items:center;gap:8px}
+    .seller-avatar{width:36px;height:36px;border-radius:50%;background:#eef2f7;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+
+    .price-row{display:flex;align-items:baseline;gap:8px;margin-top:12px}
+    .price{font-size:22px;font-weight:800}
+    .rrp{font-size:13px;color:var(--muted);text-decoration:line-through}
+    .save{font-size:13px;color:#0b7a4b;font-weight:600}
+
+    /* Action block */
+    .actions{background:#fff;border-radius:14px;padding:12px;margin-top:14px;box-shadow:var(--shadow)}
+    .select{width:100%;padding:12px;border-radius:10px;border:1px solid #e6e9ef;margin-top:10px;font-size:15px}
+    .btn{display:block;width:100%;padding:14px;border-radius:10px;border:none;font-weight:700;font-size:16px}
+    .buy{background:var(--accent);color:#fff}
+    .secondary{background:#fff;border:1px solid #cbd5e1;color:#0f172a;margin-top:10px}
+
+    .info-pill{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:#f8fafc;margin-top:10px;font-size:14px}
+    .promo{margin-top:12px;padding:12px;border-radius:10px;background:#eef7ff;border:1px solid #dbeeff}
+
+    .about{margin-top:16px;font-size:15px;line-height:1.5;color:#0f172a}
+
+    /* Sticky footer buy bar for mobile */
+    .sticky-buy{position:fixed;left:0;right:0;bottom:0;padding:10px;background:linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,1) 40%);display:flex;justify-content:center;pointer-events:none}
+    .sticky-inner{width:100%;max-width:740px;display:flex;gap:10px;padding:10px;background:transparent;pointer-events:auto}
+    .sticky-qty{width:84px;border-radius:10px;border:1px solid #e6e9ef;background:#fff;padding:10px;display:flex;align-items:center;justify-content:center}
+    .sticky-buybtn{flex:1;border-radius:10px;padding:12px;background:var(--accent);color:#fff;border:none;font-weight:800}
+
+    /* Guest checkout box */
+    .guest-box{
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(15,23,42,0.1);
+      padding:16px 20px;
+      max-width:700px;
+      width:calc(100% - 24px);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:14px;
+    }
+    .guest-box button{
+      background:var(--accent);
+      color:#fff;
+      border:none;
+      border-radius:8px;
+      padding:10px 16px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    /* Overlay blocks all interaction until guest button clicked */
+    #guestOverlay{
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.2);
+      display:flex;
+      justify-content:center;
+      align-items:flex-end;
+      z-index:9998;
+    }
+
+    @media(min-width:741px){
+      .page{padding:20px}
+      .main-image{aspect-ratio:4/3}
+    }
+
+    @media(max-width:420px){
+      .title{font-size:17px}
+      .price{font-size:20px}
+      .search{padding:8px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Guest overlay -->
+  <div id="guestOverlay">
+    <div class="guest-box" id="guestBox">
+      <div>Checkout as a guest to continue.</div>
+      <button id="guestCheckoutBtn">Checkout as Guest</button>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="logo">
+      <a style="font-weight: bold; color: red; font-size: 35px; text-decoration: none;" href="">e</a>
+      <a style="font-weight: bold; color: blue; font-size: 35px; text-decoration: none;" href="">b</a>
+      <a style="font-weight: bold; color: yellow; font-size: 35px; text-decoration: none;" href="">a</a>
+      <a style="font-weight: bold; color: green; font-size: 35px; text-decoration: none;" href="">y</a>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- FULL upgraded carousel — design unchanged -->
+    <section class="carousel" aria-label="product images">
+
+      <!-- Left arrow -->
+      <div id="leftArrow" style="
+        position:absolute;left:10px;top:50%;transform:translateY(-50%);
+        font-size:26px;background:rgba(255,255,255,0.8);padding:6px 10px;
+        border-radius:50%;cursor:pointer;user-select:none;z-index:2">‹</div>
+
+      <!-- Right arrow -->
+      <div id="rightArrow" style="
+        position:absolute;right:10px;top:50%;transform:translateY(-50%);
+        font-size:26px;background:rgba(255,255,255,0.8);padding:6px 10px;
+        border-radius:50%;cursor:pointer;user-select:none;z-index:2">›</div>
+
+      <div class="main-image" id="mainImage">
+        <img src="./images/photo_5864191391133535057_x.jpg" id="heroImg" alt="product" />
+      </div>
+
+      <div class="dots" id="dotsContainer">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div style="display:flex;gap:8px;padding:10px;justify-content:center;flex-wrap:wrap;">
+        <img src="./32134d86-2ae9-4a85-9c06-819c629f0591.jpg" class="thumb" data-id="0" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid var(--accent);cursor:pointer;">
+        <img src="./bf1de80d-b0fe-4fdf-a3e3-98cdc2f7e1c2.jpg" class="thumb" data-id="1" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./3.jpg" class="thumb" data-id="2" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./4.jpg" class="thumb" data-id="3" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./5.jpg" class="thumb" data-id="4" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./6.jpg" class="thumb" data-id="5" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./7.jpg" class="thumb" data-id="6" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./7.jpg" class="thumb" data-id="7" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./5.jpg" class="thumb" data-id="8" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./10.jpg" class="thumb" data-id="9" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+        <img src="./11.jpg" class="thumb" data-id="10" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer;">
+      </div>
+
+    </section>
+
+    <h1 class="title">HERMES Birkin 30 Z Schwarze Togo-Handtasche Goldene Beschläge Staubbeutel Box #OK2141</h1>
+    <div class="sub">
+      <div class="seller-badge">
+        <div class="seller-avatar">L</div>
+        <div>
+          <div style="font-weight:700">LuxTime Store</div>
+          <div style="font-size:13px;color:var(--muted)">99.8% positive Feedback</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price">€18,682.87</div>
+      <div class="rrp">€21,340.76</div>
+      <div class="save">speichern €2.658.42 (12.2% OFF)</div>
+    </div>
+
+    <div class="actions">
+      <label style="font-size:13px;color:var(--muted)"><strong>HERMES Birkin 30 Z Schwarze Togo-Handtasche Goldene Beschläge Staubbeutel Box #OK2141</strong></label>
+      <select class="select" id="qtySelect">
+        <option>Quantity: 1</option>
+      </select>
+
+      <button class="btn buy" id="buyNow">Kaufe es jetzt</button>
+
+      <div class="info-pill">
+        <div style="font-weight:700">⚡</div>
+        <div>
+          <div style="font-weight:700">Das ist gerade im Trend.</div>
+          <div style="color:var(--muted);font-size:13px">48 wurden bereits verkauft. 167 Leute sehen sich das gerade an.</div>
+        </div>
+      </div>
+
+      <div class="promo">
+        <div style="font-weight:700">€50,00 Rabatt mit Code</div>
+      </div>
+    </div>
+
+    <section class="about">
+      <h2 style="margin:0 0 8px 0">Artikelbeschreibung des Verkäufers</h2>
+      <p style="margin:0;color:var(--muted)">Dieses exklusive HERMÈS Birkin 30 überzeugt durch zeitlose Eleganz, hochwertige Verarbeitung und ikonisches Design. Gefertigt aus strapazierfähigem Togo-Leder in Schwarz (Noir) und veredelt mit glänzender Gold-Hardware, ist diese Tasche ein Klassiker für jede anspruchsvolle Sammlung.</p>
+      <ul style="margin-top:10px;color:var(--muted)">
+        <li>Modell: Birkin 30</li>
+        <li>Farbe: Schwarz (Noir)</li>
+        <li>Material: Togo-Leder</li>
+        <li>Hardware : Gold</li>
+        <!-- <li>Features: Drawstring Closure, Detachable Pouch</li>
+        <li>Dimensions: Approx. 28cm × 36cm × 14cm</li>
+        <li>Handle Drop: Approx. 26cm</li>
+        <li>Style: Shoulder / Everyday Tote</li> -->
+      </ul>
+    </section>
+
+    <div style="height:88px"></div>
+
+  </main>
+
+  <div class="sticky-buy">
+    <div class="sticky-inner">
+      <div class="sticky-qty">1</div>
+      <button class="sticky-buybtn" id="stickyBuy">Kaufe es jetzt</button>
+    </div>
+  </div>
+
+  <!-- FULL upgraded slider script -->
+  <script>
+    const hero = document.getElementById('heroImg');
+    const images = [
+      './32134d86-2ae9-4a85-9c06-819c629f0591.jpg',
+      './bf1de80d-b0fe-4fdf-a3e3-98cdc2f7e1c2.jpg',
+      './3.jpg',
+      './4.jpg',
+      './5.jpg',
+      './6.jpg',
+      './7.jpg',
+      './7.jpg',
+      './5.jpg',
+      './10.jpg',
+      './11.jpg'
+    ];
+
+    let idx = 0;
+
+    function qsAll(sel){return Array.prototype.slice.call(document.querySelectorAll(sel))}
+    let dots = qsAll('.dot');
+    let thumbs = qsAll('.thumb');
+
+    function setSlide(i){
+      idx = (i + images.length) % images.length;
+      hero.src = images[idx];
+
+      dots.forEach((d, di)=> d.classList.toggle('active', di===idx));
+
+      thumbs.forEach((t, ti)=> {
+        t.style.border = ti === idx
+          ? "2px solid var(--accent)"
+          : "2px solid transparent";
+      });
+    }
+
+    // wire dots
+    dots.forEach((d,di)=> d.addEventListener('click',()=>setSlide(di)));
+    // wire thumbs
+    thumbs.forEach(t =>
+      t.addEventListener('click', ()=> setSlide(parseInt(t.dataset.id)))
+    );
+
+    document.getElementById('leftArrow').onclick = () => setSlide(idx - 1);
+    document.getElementById('rightArrow').onclick = () => setSlide(idx + 1);
+
+    let startX=null;
+    const main = document.getElementById('mainImage');
+    main.addEventListener('touchstart',e=> startX = e.touches[0].clientX);
+    main.addEventListener('touchend',e=>{
+      if(startX===null) return;
+      let dx = (e.changedTouches[0].clientX - startX);
+      if(Math.abs(dx)>40){
+        if(dx<0) setSlide(idx+1);
+        else setSlide(idx-1);
+      }
+      startX=null;
+    });
+
+    let auto = setInterval(()=> setSlide(idx + 1), 4000);
+    // pause on hover/touch
+    ['mouseenter','touchstart'].forEach(ev=> main.addEventListener(ev, ()=> clearInterval(auto)));
+    ['mouseleave','touchend'].forEach(ev=> main.addEventListener(ev, ()=> { clearInterval(auto); auto = setInterval(()=> setSlide(idx + 1), 4000);}));
+
+    // init
+    setSlide(0);
+
+    function goBuy(){
+      const qty = encodeURIComponent(document.getElementById('qtySelect').value || '1');
+      location.href = `user-infor.html?qty=${qty}`;
+    }
+    document.getElementById('buyNow').addEventListener('click',goBuy);
+    document.getElementById('stickyBuy').addEventListener('click',goBuy);
+
+    if(!localStorage.getItem('visited')){
+      document.getElementById('guestOverlay').style.display = 'flex';
+    } else {
+      document.getElementById('guestOverlay').style.display = 'none';
+    }
+
+    document.getElementById('guestCheckoutBtn').addEventListener('click',()=>{
+      localStorage.setItem('visited','true');
+      document.getElementById('guestOverlay').style.display = 'none';
+      location.href='product-143.html';
+    });
+
+  </script>
+
+</body>
+</html>

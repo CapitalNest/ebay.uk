@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ebay</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #000;
+        }
+        header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+        }
+        header img.logo {
+            height: 38px;
+        }
+        .store-banner {
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .store-banner h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .store-stats {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+        .search-box {
+            padding: 10px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px;
+        }
+        .categories {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px;
+        }
+        .cat-card {
+            min-width: 140px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+        .cat-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        .cat-card p {
+            margin: 8px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
+            gap: 15px;
+            padding: 10px;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .product-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        .product-card .info {
+            padding: 10px;
+        }
+        .product-card .info h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .product-card .info p {
+            margin: 5px 0 0 0;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- <img src="https://dummyimage.com/140x40/000/fff&text=LuxTime" class="logo" /> -->
+        <div><a style="font-weight: bold; color: red; font-size: 35px; text-decoration: none; outline: none;" href="">e</a><a style="font-weight: bold; color: blue; font-size: 35px; text-decoration: none; outline: none;" href="">b</a><a style="font-weight: bold; color: yellow; font-size: 35px; text-decoration: none; outline: none;" href="">a</a><a style="font-weight: bold; color: green; font-size: 35px; text-decoration: none; outline: none;" href="">y</a></div>
+    </header>
+
+    <div class="profile-header" style="background:#f2f2f2;padding:20px;text-align:center;border-bottom:1px solid #ddd; background: url(https://th.bing.com/th/id/OIP.6v1GeSxa_L4CBac61zZeUQHaEK?w=283&h=180&c=7&r=0&o=7&pid=1.7&rm=3); background-repeat: no-repeat;">
+        <img src="https://dummyimage.com/100x100/000/fff&text=LT" style="width:90px;height:90px;border-radius:50%;border:3px solid #000;" />
+        <h2 style="margin:10px 0 5px 0;font-size:22px;">LuxeMarket</h2>
+        <p style="margin:0;font-size:15px;color:#444;">99,8 % positives Feedback • 64,000 verkaufte Artikel • 27,000 Follower</p>
+    </div>
+
+    <div class="store-banner">
+        <h1>LuxTime Store</h1>
+    </div>
+
+    <div class="store-stats">
+        ⭐ 99,8 % positiv • 64,000 verkauft • 27,000 Follower
+    </div>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search all 7 items" />
+    </div>
+
+    <div class="section-title">Featured Categories</div>
+    <div class="categories">
+        <div class="cat-card">
+            <img src="https://th.bing.com/th?q=Bag+Logo+for+Website&w=120&h=120&c=1&rs=1&qlt=70&o=7&cb=1&pid=InlineBlock&rm=3&mkt=en-WW&cc=NG&setlang=en&adlt=moderate&t=1&mw=247" />
+            <p>Tasche</p>
+        </div>
+        <div class="cat-card">
+            <img src="https://th.bing.com/th/id/OIP.1T3cOcZDuOwRyri0XfEVOAHaHa?w=136&h=150&c=6&o=7&pid=1.7&rm=3" />
+            <p>Turnschuhe</p>
+        </div>
+        <div class="cat-card">
+            <img src="https://th.bing.com/th?id=OIF.ZRkNlNV%2bTb9zE6p0bM4NoA&w=152&h=203&c=7&r=0&o=7&pid=1.7&rm=3" />
+            <p>Kleider</p>
+        </div>
+    </div>
+
+    <div class="section-title">Available Items</div>
+    <div class="products">
+        <div class="product-card">
+            <a href="./product-143.html"><img src="./photo_5864191391133535057_x.jpg" /></a>
+            <div class="info">
+                <h3>HERMES Birkin 30 Ostrich-Handtasche in Orange mit silberner Hardware und Staubbeutel #OK3761</h3>
+                <p>€12,464.08 <a style="font-weight: bold; color: green; font-family: Arial, Helvetica, sans-serif; text-decoration: none; outline: none;" href="">17.2% OFF</a></p>
+                <p>US $14,453.96</p>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <a href="./product-243.html"><img src="./32134d86-2ae9-4a85-9c06-819c629f0591.jpg" /></a>
+            <div class="info">
+                <h3>HERMES Birkin 30 Z Black Togo Handbag Gold Hardware Dust Bag Box #OK2141</h3>
+                <p>€18,682.87 <a style="font-weight: bold; color: green; font-family: Arial, Helvetica, sans-serif; text-decoration: none; outline: none;" href="">12.29% OFF</a></p>
+                <p>US $21,664.58</p>
+            </div>
+        </div>
+
+        <div class="product-card">
+           <a href="./product-343.html"> <img src="./img 1.jpg" /></a>
+            <div class="info">
+                <h3>Hermes Birkin30 Handtasche schwarz Palladium Hardware Togo Leder C Stempel 2018</h3>
+                <p>£14,968.54 <a style="font-weight: bold; color: green; font-family: Arial, Helvetica, sans-serif; text-decoration: none; outline: none;" href="">9.52% OFF</a></p>
+                                <p>US $17,357.64</p>
+
+            </div>
+        </div>
+
+        <div class="product-card">
+            <a href="./product-443.html"><img src="14.jpg" /></a>
+            <div class="info">
+                <h3>HERMES Birkin 30 Handtasche C Togo Leder Beige Trench Gebraucht SHW</h3>
+                <p>€13,399.37 <a style="font-weight: bold; color: green; font-family: Arial, Helvetica, sans-serif; text-decoration: none; outline: none;" href="">13% OFF</a></p>
+                <p>US $15,556,36</p>
+            </div>
+        </div>
+
+        <div class="product-card">
+           <a href="./product-543.html"> <img src="img15.jpg" /></a>
+            <div class="info">
+                <h3>Hermès Craie Togo Leder Birkin 30 cm Retourne</h3>
+                <p>€18,329.63 <a style="font-weight: bold; color: green; font-family: Arial, Helvetica, sans-serif; text-decoration: none; outline: none;" href="">21.4% OFF</a></p>
+                        <p>US $15,556,36</p>
+            </div>
+        </div>
+
+        <!-- <div class="product-card">
+           <a href="./product-643.html"> <img src="img6/img1.jpg" /></a>
+            <div class="info">
+                <h3>Hermès Marron Fonce Swift Leather & Striped Toile Canvas Jumping Birkin 30 cm</h3>
+                <p>€15,424.14 <a style="font-weight: bold; color: green; font-family: Arial, Helvetica, sans-serif; text-decoration: none; outline: none;" href="">16% OFF</a></p>
+                <p>US $17,901.79</p>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <a href="./product-743.html"><img src="./img7/img1.jpg" /></a>
+            <div class="info">
+                <h3>Hermes Birkin 30 Blue Zanzibar Bleu Epsom Leather Gold Hardware</h3>
+                <p>€12,982.28 <a style="font-weight: bold; color: green; font-family: Arial, Helvetica, sans-serif; text-decoration: none; outline: none;" href="">11% OFF</a></p>
+                <p>US $15,053.49</p>
+            </div>
+        </div>
+    </div> -->
+
+</body>
+</html>

